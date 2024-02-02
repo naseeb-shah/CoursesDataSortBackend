@@ -175,7 +175,7 @@ let courserArray = [
   },
   {
     id: 1, // Unique identifier for the course
-    name: "Introduction to React Native",
+    name: "Introduction to React",
     instructor: "John Doe", // Name of the course instructor
     description:
       "Learn the basics of React Native development and build your first mobile app.",
@@ -189,7 +189,7 @@ let courserArray = [
     syllabus: [
       {
         week: 1,
-        topic: "Introduction to React Native",
+        topic: "Introduction to Web Applications",
         content:
           "Overview of React Native, setting up your development environment.",
       },
@@ -230,7 +230,7 @@ let courserArray = [
     syllabus: [
       {
         week: 1,
-        topic: "Introduction to React Native",
+        topic: "Introduction to Node",
         content:
           "Overview of React Native, setting up your development environment.",
       },
@@ -271,7 +271,7 @@ let courserArray = [
     syllabus: [
       {
         week: 1,
-        topic: "Introduction to React Native",
+        topic: "Introduction Dark Magic",
         content:
           "Overview of React Native, setting up your development environment.",
       },
@@ -455,11 +455,24 @@ app.get("/student/:id", async (req, res) => {
     res.status(500).json({ error: e });
   }
 });
+app.get("/search/:name", async (req, res) => {
+  try {
+    let name = req.params.name;
+    let result = courserArray.filter((e) =>
+      e.name.toUpperCase().includes(name.toUpperCase())
+    );
+
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
 app.get("/", async (req, res) => {
   res.json({
     statue: "server is runing",
   });
 });
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
