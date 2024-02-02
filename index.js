@@ -12,6 +12,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+// thsisi
+//
 // Connect to MongoDB
 
 // Course model
