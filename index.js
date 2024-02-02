@@ -3,7 +3,15 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 const port = 3001;
-app.use(cors());
+const corsOptions = {
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 // Connect to MongoDB
 
 // Course model
