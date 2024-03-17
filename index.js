@@ -1,6 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const GameUser= require('./models/gameUsermodel')
+require('dotenv').config();
+const dbHost = process.env.dburl;
+const dbConnection=require('./models/index');
+const connectDatabase = require("./models/index");
+const gameUser = require("./models/gameUsermodel");
+
+
 const app = express();
 const port = 3001;
 const corsOptions = {
@@ -9,6 +17,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(express.json())
 // thsisi
 //
 // Connect to MongoDB
@@ -521,7 +530,60 @@ app.get('/api/graph', (req, res) => {
 
 
 
+app.post('/game-user',async(req,res)=>{
+    const {name,email,password}=req.body
 
+    if(!name||!password||!email){
+      res.status(400).json({
+        err:"Invalid input."
+      })
+    }
+
+    const newUser= new GameUser({name,email,password})
+     await newUser.save()
+
+
+res.status(200).json({
+  info:'User created '
+})
+
+
+  
+   
+})
+app.post('/game-user-log', async (req, res) => {
+  const { email, password } = req.body;
+
+  let user = await GameUser.findOne({ email: email, password: password }).lean();
+
+  if (!user) {
+      // User not found, send a 400 Bad Request response
+      return res.status(400).json({ error: 'User not found' });
+  }else{
+
+    res.status(200).json(user);
+  }
+
+  // User found, send a 200 OK response with the user data
+});
+
+
+app.post('/update-leader',async(req,res)=>{
+const{id,data}=req.body
+let user= await GameUser.findOne({
+  id:id
+})
+if(!user){
+  res.status(400).json("user not found")
+}
+user.preGames.push(data)
+res.status(200).json(user)
+
+
+})
+
+connectDatabase(dbHost).then(e=>console.log('connected Database')).catch(e=>console.log(e))
 app.listen(port, () => {
+     
   console.log(`Server is running on http://localhost:${port}`);
 });
